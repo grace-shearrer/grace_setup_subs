@@ -13,8 +13,8 @@ from datetime import datetime
 import dicom
 import cPickle as pickle
 import socket
-import xnat_tools
-from osirixdownloader import downloader
+#import xnat_tools
+#from osirixdownloader import downloader
 import zipfile
 
 def run_logged_cmd(cmd,cmdfile):
@@ -79,30 +79,30 @@ def parse_command_line():
 
     # set up flags with arguments
 
-    parser.add_argument('--xnat_server', dest='xnat_server',
-        help='URL for xnat server',default="https://xnat.irc.utexas.edu/xnat-irc")
-    parser.add_argument('--osirix_usernam', dest='osirix_username',
-        help='user name for osirix server',default='')
-    parser.add_argument('--osirix_password', dest='osirix_password',
-        help='password for osirix server',default='')
+#    parser.add_argument('--xnat_server', dest='xnat_server',
+#        help='URL for xnat server',default="https://xnat.irc.utexas.edu/xnat-irc")
+#    parser.add_argument('--osirix_usernam', dest='osirix_username',
+#        help='user name for osirix server',default='')
+#    parser.add_argument('--osirix_password', dest='osirix_password',
+#        help='password for osirix server',default='')
     parser.add_argument('-f', dest='filename',
         help='path to zipped data file')
     parser.add_argument('--studyname', dest='studyname',
         help='name of study',required=True)
     parser.add_argument('-b', dest='basedir',
-        help='base directory for data file', default='/corral-repl/utexas/poldracklab/data/')
+        help='base directory for data file', default='/projects/niblab/data/')
     parser.add_argument('-s','--subcode', dest='subcode',
         help='subject code',required=True)
     parser.add_argument('--subdir', dest='subdir',
         help='subject dir (defaults to subject code)',default='')
     parser.add_argument('--mcflirt-args', dest='mcflirt_args',
         help='arguments for mcflirt',default='-plots -sinc_final')
-    parser.add_argument('--xnat-project', dest='xnat_project',
-        help='project in XNAT',default='poldrack')
+#    parser.add_argument('--xnat-project', dest='xnat_project',
+#        help='project in XNAT',default='poldrack')
     parser.add_argument('--mricrondir', dest='mricrondir',
         help='directory for mricron',default='')
     parser.add_argument('--fs-subdir', dest='fs_subdir',
-        help='subject directory for freesurfer',default='/corral-repl/utexas/poldracklab/data/subdir')
+        help='subject directory for freesurfer',default='/projects/niblab/data/subdir')
 
     args = parser.parse_args()
     arglist={}
@@ -301,27 +301,27 @@ def topup(args,subdir_names):
 		    
 	
 
-def download_from_osirix(args, subdir):
-	dl=downloader.Downloader(args['osirix_username'],args['osirix_password'])
-	datazip = dl.downloadDicomsByPatientID(args['subcode'])
-	ziphandle = zipfile.ZipFile(datazip)
-	os.path.mkdirs(os.path.join(subdir, 'raw', args['subcode']))
-	ziphandle.extractall(os.path.join(subdir,'raw',args['subcode']))
-
-
-def download_from_xnat(args,subdir):
-		args['keepdata'] = True
-		#use default download username
-		if (len(args['xnat_username'])<1) or (len(args['xnat_password'])<1):
-		    xnat_tools.down_subject_dicoms(args['xnat_server'],
-			  os.path.join(subdir,'raw'),
-			  args['xnat_project'], args['subcode'])
-		else:
-		    xnat_tools.down_subject_dicoms(args['xnat_server'],
-			  os.path.join(subdir,'raw'),
-			  args['xnat_project'], args['subcode'],
-			  xnat_username=args['xnat_username'],
-			  xnat_password=args['xnat_password'])
+#def download_from_osirix(args, subdir):
+#	dl=downloader.Downloader(args['osirix_username'],args['osirix_password'])
+#	datazip = dl.downloadDicomsByPatientID(args['subcode'])
+#	ziphandle = zipfile.ZipFile(datazip)
+#	os.path.mkdirs(os.path.join(subdir, 'raw', args['subcode']))
+#	ziphandle.extractall(os.path.join(subdir,'raw',args['subcode']))
+#
+#
+#def download_from_xnat(args,subdir):
+#		args['keepdata'] = True
+#		#use default download username
+#		if (len(args['xnat_username'])<1) or (len(args['xnat_password'])<1):
+#		    xnat_tools.down_subject_dicoms(args['xnat_server'],
+#			  os.path.join(subdir,'raw'),
+#			  args['xnat_project'], args['subcode'])
+#		else:
+#		    xnat_tools.down_subject_dicoms(args['xnat_server'],
+#			  os.path.join(subdir,'raw'),
+#			  args['xnat_project'], args['subcode'],
+#			  xnat_username=args['xnat_username'],
+#			  xnat_password=args['xnat_password'])
 
 def do_unzipping(args,subdir):
 	    if not args['filename'] or not os.path.exists(args['filename']):
@@ -560,8 +560,8 @@ if __name__ == "__main__":
 	
 	outfile=setup_outfiles()
 
-	if args['getdata']:
-		download_from_osirix(args,subdir)
+#	if args['getdata']:
+#		download_from_osirix(args,subdir)
 
 	if args['unzip']:
 		do_unzipping(args,subdir)
